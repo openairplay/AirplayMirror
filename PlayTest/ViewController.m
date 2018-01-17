@@ -35,7 +35,9 @@ void airplay_data_receive(unsigned char* buffer, int buflen, int payload,void* r
             NSMutableData* pps = [NSMutableData dataWithCapacity:pps_size];
             [pps appendBytes:&buffer[11+sps_size] length:pps_size];
             
-            vc.videoDecoder = [VideoDecoder new];
+            if (vc.videoDecoder == nil)
+                vc.videoDecoder = [VideoDecoder new];
+            
             [vc.videoDecoder setupWithSPS:sps pps:pps];
             
             __weak typeof(vc) weakVC = vc;
