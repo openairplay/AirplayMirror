@@ -26,6 +26,10 @@ static void outputCallback(void * decompressionOutputRefCon, void * sourceFrameR
 @end
 
 @implementation VideoDecoder
+- (void)dealloc{
+    [self clean];
+}    
+    
 - (void)setupWithSPS:(NSData*)sps pps:(NSData*)pps{
     [self clean];
     
