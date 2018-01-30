@@ -5,9 +5,15 @@ typedef struct mirror_context{
     char name[256];
     int width;
     int height;
-    void (*data_receive)(unsigned char* buffer, int buflen, int payload,void* ref);
     void* ref;
+    
+    void (*video_data_receive)(unsigned char* buffer, long buflen, int payload,void* ref);
+    
+    void (*audio_data_receive)(unsigned char* buffer, long buflen,void* ref);
+
+	void(*airplay_did_stop)(void* ref);
+
 }mirror_context;
 
-void start_mirror(mirror_context* context);
-void stop_mirror();
+int start_mirror(mirror_context* context);
+void stop_mirror(void);

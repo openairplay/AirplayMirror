@@ -20,7 +20,7 @@
 @end
 
 
-void airplay_data_receive(unsigned char* buffer, int buflen, int payload,void* ref){
+void airplay_data_receive(unsigned char* buffer, long buflen, int payload,void* ref){
     
     @autoreleasepool{
         ViewController* vc = (__bridge ViewController*)ref;
@@ -42,7 +42,8 @@ void airplay_data_receive(unsigned char* buffer, int buflen, int payload,void* r
             
             __weak typeof(vc) weakVC = vc;
             vc.videoDecoder.newFrameAvailable = ^(CVPixelBufferRef pixelBuffer) {
-                [weakVC displayFrame:pixelBuffer];
+                if (pixelBuffer)
+                    [weakVC displayFrame:pixelBuffer];
             } ;
         }else{
             [vc.videoDecoder decodeFrame:buffer bufferLen:buflen];
@@ -71,7 +72,9 @@ void airplay_data_receive(unsigned char* buffer, int buflen, int payload,void* r
         button.tag = 1;
         [button setTitle:@"Stop"];
         mirror_context context;
-        context.data_receive = airplay_data_receive;
+        context.video_data_receive = airplay_data_receive;
+        context.audio_data_receive = 0;
+        context.airplay_did_stop = 0;
         strcpy(context.name, "AirPlay");
         context.width = 1280;
         context.height = 720;
